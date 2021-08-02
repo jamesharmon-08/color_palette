@@ -24,13 +24,16 @@ def image():
     img=Image.open(img_file).convert(mode="HSV")
 
     color_array = np.array(img)
+    h_arr = color_array[:,0]
+    s_arr = color_array[:,1].copy()
+    v_arr = color_array[:,2].copy()
     print(f'The size of the array is {color_array.shape}')
 
-    saturation = color_array[0][1].mean()
-    value=color_array[0][2].mean()
-    (unique, counts) = np.unique(color_array[0]/255*359, return_counts=True)
+    saturation = s_arr.mean()
+    value=v_arr.mean()
+    (unique, counts) = np.unique(h_arr, return_counts=True)
     frequency = np.asarray((unique, counts)).T
-    print(frequency)
+    print(frequency*359//255)
     print(saturation)
     print(value)
     return render_template('index.html',file=img_file.filename)
